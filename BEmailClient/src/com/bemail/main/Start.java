@@ -3,10 +3,11 @@ package com.bemail.main;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 
-import com.bemail.email.EmailCreator;
-import com.bemail.email.EmailReceiver;
+import com.bemail.email.EmailReceivingParameters;
+import com.bemail.email.EmailSendingParameters;
+import com.bemail.email.EmailService;
 /**
- * Main Class
+ * Main Class for testing EmailService
  * @author Marcin
  *
  */
@@ -16,23 +17,27 @@ public class Start {
 	{
 		try
 		{	
-			EmailCreator emailCreator = new EmailCreator();
-			emailCreator.generateAndSendEmail("Some email body <br> Greetings  : MB", "someemail@email.com", "somePassword");
+			EmailSendingParameters emailSendingParameters = new EmailSendingParameters();
+				emailSendingParameters.setEmailBody("Some email body");
+				emailSendingParameters.setEmailReceiverAdress("lepek007@gmail.com");
+				emailSendingParameters.setEmailBody("testowanie");
+			
+			EmailReceivingParameters emailReceivingParameters = new EmailReceivingParameters();
+				emailReceivingParameters.setHostName("pop.gmail.com");
+				emailReceivingParameters.setUserName("lepek007@gmail.com");
+				emailReceivingParameters.setPassword("testowanie");
+				
+			EmailService emailService = new EmailService();
+			emailService.generateAndSendEmail(emailSendingParameters);
+
 		
-			EmailReceiver emailReceiver = new EmailReceiver();
-			/*Example properties for readUnseenMessages method
-			 *String host = "pop.gmail.com";// change accordingly
-		      String mailStoreType = "pop3";
-		      String username = "yourmail@gmail.com";// change accordingly
-		      String password = "*****";// change accordingly
-			 */
-			Message[] unreadMessages = emailReceiver.readUnseenMessages("pop.gmail.com", "someemail@email.com", "somePassword");
-			//message.getFrom - to read who send email
+			Message[] unreadMessages = emailService.readUnseenMessages(emailReceivingParameters);
+
 		} 
-		catch (MessagingException e) 
+		catch (MessagingException e) 	
 		{
 			e.printStackTrace();
 		}
 	}
-
+	
 }
